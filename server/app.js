@@ -4,6 +4,9 @@ import { logger } from "@hono/hono/logger";
 // importing database client
 import postgres from "postgres";
 
+import * as communityController from "./controllers/communityController.js"
+
+
 const app = new Hono();
 // creating an instance of the database client
 const sql = postgres();
@@ -11,16 +14,17 @@ const sql = postgres();
 app.use("/*", cors());
 app.use("/*", logger());
 
-let visits = 0;
-app.get("/api/visits", (c) => {
-    visits++;
-    return c.json({ visits });
-});
+// POST community
+app.post("/api/communities", communityController.create)
 
-// retrieving todos from database on requests to /api/todos
-app.get("/api/todos", async (c) => {
-    const todos = await sql`SELECT * FROM todos`;
-    return c.json(todos);
-});
+// GET communities
+app.get("/api/communities", communityController.readAll)
+
+// GET community
+app.get("/api/communities/:communityId", communityController.readOne)
+
+// DELETE community
+app.delete("/api/communities/:communityId", communityController.deleteOne)
+
 
 export default app;
