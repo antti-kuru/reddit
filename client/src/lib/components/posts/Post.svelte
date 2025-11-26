@@ -6,9 +6,12 @@
 
     let communityState = useCommunityState();
     let postState = usePostState();
-
-    let community = communityState.getOne(communityId);
-    let post = postState.getPost(communityId, postId);
+    let community = $derived(
+        communityState.communities.find((c) => c.id === communityId),
+    );
+    let post = $derived(
+        postState.posts[communityId]?.find((p) => p.id === postId),
+    );
 </script>
 
 {#if community && post}
