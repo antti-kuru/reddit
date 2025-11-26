@@ -4,7 +4,9 @@
 
     let communityState = useCommunityState();
 
-    let community = communityState.getOne(communityId);
+    let community = $derived(
+        communityState.communities.find((c) => c.id === communityId),
+    );
     console.log(communityId);
 </script>
 

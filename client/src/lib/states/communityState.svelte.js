@@ -1,45 +1,37 @@
 import { browser } from "$app/environment"
-const COMMUNITIES_KEY = "communities"
+import * as communitiesApi from "$lib/apis/communitiesApi.js"
 
+let communityState = $state([]);
 
-
-let initialCommunities = [
-]
-
-if (browser && localStorage.getItem(COMMUNITIES_KEY) != null) {
-    initialCommunities = JSON.parse(localStorage.getItem(COMMUNITIES_KEY));
+const initCommunities = async () => {
+    if (browser) {
+        communityState = await communitiesApi.readCommunities()
+    }
 }
 
-let communityState = $state(initialCommunities);
-
-
-const saveCommunities = () => {
-    localStorage.setItem(COMMUNITIES_KEY, JSON.stringify(communityState))
+const initCommunity = async (communityId) => {
+    if (browser) {
+        const community = await communitiesApi.readCommunity(communityId)
+        if (community && !communityState.find(c => c.id === communityId)) {
+            communityState.push(community)
+        }
+    }
 }
-
-
-
-const removeCommunity = (id) => {
-    communityState = communityState.filter(community => community.id != id)
-    saveCommunities()
-}
-
 
 const useCommunityState = () => {
     return {
         get communities() {
             return communityState
         },
-        removeCommunity,
-        addCommunity: (name, desc) => {
-            communityState.push({ id: communityState.length + 1, name: name, description: desc }), console.log(name, desc)
-            saveCommunities()
+        addCommunity: async (community) => {
+            const newCommunity = await communitiesApi.createCommunity(community)
+            communityState.push(newCommunity)
         },
-        getOne: (id) => {
-            return communityState.find((c) => c.id === id)
+        removeCommunity: async (communityId) => {
+            await communitiesApi.deleteCommunity(communityId)
+            communityState = communityState.filter(c => c.id !== communityId)
         }
-
     }
 }
 
-export { useCommunityState }
+export { initCommunities, initCommunity, useCommunityState }
