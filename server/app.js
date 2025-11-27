@@ -7,6 +7,8 @@ import * as postController from "./controllers/postController.js"
 import * as commentController from "./controllers/commentController.js"
 import * as authController from "./controllers/authController.js"
 
+import * as middlewares from "./middlewares.js";
+
 const app = new Hono();
 
 app.use("/*", cors());
@@ -19,8 +21,9 @@ app.post("/api/auth/register", authController.register);
 // Login
 app.post("/api/auth/login", authController.login);
 
+
 // POST community
-app.post("/api/communities", communityController.create)
+app.post("/api/communities", middlewares.authenticate, communityController.create)
 
 // GET communities
 app.get("/api/communities", communityController.readAll)
@@ -29,7 +32,7 @@ app.get("/api/communities", communityController.readAll)
 app.get("/api/communities/:communityId", communityController.readOne)
 
 // DELETE community
-app.delete("/api/communities/:communityId", communityController.deleteOne)
+app.delete("/api/communities/:communityId", middlewares.authenticate, communityController.deleteOne)
 
 // POST post
 app.post("/api/communities/:communityId/posts", postController.create)

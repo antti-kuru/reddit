@@ -2,10 +2,10 @@ import postgres from "postgres"
 
 const sql = postgres()
 
-const create = async (community) => {
+const create = async (community, userId) => {
     const result = await sql`INSERT INTO communities
-    (name, description)
-    VALUES (${community.name}, ${community.description})
+    (name, description, created_by)
+    VALUES (${community.name}, ${community.description}, ${userId})
     RETURNING *;`;
     return result[0];
 }
@@ -19,9 +19,9 @@ const findById = async (id) => {
     return result[0]
 }
 
-const deleteById = async (id) => {
+const deleteById = async (id, userId) => {
     const result = await sql`DELETE FROM communities
-    WHERE id = ${id}
+    WHERE id = ${id} AND created_by = ${userId}
     RETURNING *;`;
 
     return result[0]
