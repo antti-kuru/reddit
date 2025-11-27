@@ -7,7 +7,7 @@
     let community = $derived(
         communityState.communities.find((c) => c.id === communityId),
     );
-    console.log(communityId);
+    console.log(community);
 </script>
 
 {#if community}

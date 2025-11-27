@@ -35,7 +35,7 @@ app.get("/api/communities/:communityId", communityController.readOne)
 app.delete("/api/communities/:communityId", middlewares.authenticate, communityController.deleteOne)
 
 // POST post
-app.post("/api/communities/:communityId/posts", postController.create)
+app.post("/api/communities/:communityId/posts", middlewares.authenticate, postController.create)
 
 // GET posts
 app.get("/api/communities/:communityId/posts", postController.readAll)
@@ -44,16 +44,16 @@ app.get("/api/communities/:communityId/posts", postController.readAll)
 app.get("/api/communities/:communityId/posts/:postId", postController.readOne)
 
 // DELETE post
-app.delete("/api/communities/:communityId/posts/:postId", postController.deleteOne)
+app.delete("/api/communities/:communityId/posts/:postId", middlewares.authenticate, postController.deleteOne)
 
 // POST comment
-app.post("/api/communities/:communityId/posts/:postId/comments", commentController.create)
+app.post("/api/communities/:communityId/posts/:postId/comments", middlewares.authenticate, commentController.create)
 
 // GET comments
 app.get("/api/communities/:communityId/posts/:postId/comments", commentController.readAll)
 
 // DELETE comment
-app.delete("/api/communities/:communityId/posts/:postId/comments/:commentId", commentController.deleteOne)
+app.delete("/api/communities/:communityId/posts/:postId/comments/:commentId", middlewares.authenticate, commentController.deleteOne)
 
 
 export default app;

@@ -3,6 +3,10 @@
     import { usePostState } from "$lib/states/postState.svelte";
 
     let postState = usePostState();
+
+    import { useAuthState } from "$lib/states/authState.svelte";
+
+    let authState = useAuthState();
 </script>
 
 <ul>
@@ -12,9 +16,12 @@
                 >{post.title}</a
             >
             <p>{post.content}</p>
-            <button onclick={() => postState.removePost(communityId, post.id)}
-                >Remove</button
-            >
+            {#if authState.user && authState.user.id === post.created_by}
+                <button
+                    onclick={() => postState.removePost(communityId, post.id)}
+                    >Remove</button
+                >
+            {/if}
         </li>
     {/each}
 </ul>

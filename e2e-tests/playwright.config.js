@@ -4,7 +4,7 @@ export default defineConfig({
     testDir: "./tests",
     reporter: "list",
     use: {
-        baseURL: "http://localhost:5173",
+        baseURL: "http://localhost:5174",
         trace: "off",
     },
 

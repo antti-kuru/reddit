@@ -1,22 +1,28 @@
 import { browser } from "$app/environment"
-const POSTS_KEY = "posts"
+import * as postsApi from "$lib/apis/postsApi"
 
-let initialPosts = []
+let postState = $state({});
 
-if (browser && localStorage.getItem(POSTS_KEY) != null) {
-    initialPosts = JSON.parse(localStorage.getItem(POSTS_KEY));
+const initCommunityPosts = async (communityId) => {
+    if (browser) {
+        postState[communityId] = await postsApi.readPosts(communityId)
+    }
 }
 
-let postState = $state(initialPosts);
+const initPost = async (communityId, postId) => {
+    if (browser) {
+        if (!postState[communityId]) {
+            postState[communityId] = [];
+        }
+        console.log(postId)
+        console.log(communityId)
+        const post = await postsApi.readPost(communityId, postId)
 
-const savePosts = () => {
-    localStorage.setItem(POSTS_KEY, JSON.stringify(postState))
-}
 
-
-const removePost = (communityId, postId) => {
-    postState[communityId] = postState[communityId].filter((post) => post.id != postId)
-    savePosts()
+        if (post) {
+            postState[communityId].push(post)
+        }
+    }
 }
 
 const usePostState = () => {
@@ -24,18 +30,17 @@ const usePostState = () => {
         get posts() {
             return postState
         },
-        getPost: (communityId, postId) => {
-            return postState[communityId].find(p => p.id === postId)
+        addPost: async (communityId, post) => {
+            const newPost = await postsApi.createPost(communityId, post)
+            const posts = postState[communityId] || []
+            posts.push(newPost)
+            postState[communityId] = posts
         },
-        addPost: (communityId, title, content) => {
-            if (!postState[communityId]) {
-                postState[communityId] = []
-            }
-            postState[communityId].push({ id: postState[communityId].length + 1, title: title, content: content })
-            savePosts()
-        },
-        removePost
+        removePost: async (communityId, postId) => {
+            await postsApi.deletePost(communityId, postId)
+            postState[communityId] = postState[communityId].filter(p => p.id !== postId)
+        }
     }
 }
 
-export { usePostState }
+export { initCommunityPosts, initPost, usePostState }

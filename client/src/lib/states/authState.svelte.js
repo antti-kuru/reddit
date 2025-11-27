@@ -11,7 +11,8 @@ if (browser) {
     const storedUser = localStorage.getItem(USER_KEY);
     const storedToken = localStorage.getItem(TOKEN_KEY);
 
-    if (storedUser) {
+    if (storedUser && storedUser !== "undefined") {
+        console.log(storedUser)
         user = JSON.parse(storedUser);
     }
     if (storedToken) {

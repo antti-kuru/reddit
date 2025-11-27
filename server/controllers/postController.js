@@ -1,6 +1,7 @@
 import * as postRepository from "../repositories/postRepository.js"
 
 const create = async (c) => {
+    const user = c.get("user");
     const communityId = Number(c.req.param('communityId'))
     if (!Number.isInteger(communityId)) {
         return c.json({ error: "Invalid community id" }, 400)
@@ -11,7 +12,7 @@ const create = async (c) => {
         return c.json({ error: "Missing required fields" }, 400)
     }
 
-    const newPost = await postRepository.create(communityId, post)
+    const newPost = await postRepository.create(communityId, post, user.id)
     return c.json(newPost, 201)
 }
 
@@ -45,6 +46,7 @@ const readOne = async (c) => {
 }
 
 const deleteOne = async (c) => {
+    const user = c.get("user");
     const communityId = Number(c.req.param('communityId'))
     const postId = Number(c.req.param('postId'))
 
@@ -55,7 +57,7 @@ const deleteOne = async (c) => {
         return c.json({ error: "Invalid post id" }, 400)
     }
 
-    const deletedPost = await postRepository.deleteById(communityId, postId)
+    const deletedPost = await postRepository.deleteById(communityId, postId, user.id)
     if (!deletedPost) {
         return c.json({ error: "Post not found" }, 404)
     }

@@ -41,7 +41,7 @@ const login = async (c) => {
     return c.json({
         message: "Login successful",
         user: payload,
-        token,
+        token: token
     });
 };
 

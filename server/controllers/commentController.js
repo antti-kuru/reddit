@@ -1,6 +1,7 @@
 import * as commentRepository from "../repositories/commentRepository.js"
 
 const create = async (c) => {
+    const user = c.get("user");
     const communityId = Number(c.req.param('communityId'))
     const postId = Number(c.req.param('postId'))
 
@@ -16,7 +17,7 @@ const create = async (c) => {
         return c.json({ error: "Missing required fields" }, 400)
     }
 
-    const newComment = await commentRepository.create(communityId, postId, comment)
+    const newComment = await commentRepository.create(communityId, postId, comment, user.id)
     return c.json(newComment, 201)
 }
 
@@ -31,6 +32,7 @@ const readAll = async (c) => {
 }
 
 const deleteOne = async (c) => {
+    const user = c.get("user");
     const communityId = Number(c.req.param('communityId'))
     const postId = Number(c.req.param('postId'))
     const commentId = Number(c.req.param('commentId'))
@@ -45,7 +47,7 @@ const deleteOne = async (c) => {
         return c.json({ error: "Invalid comment id" }, 400)
     }
 
-    const deletedComment = await commentRepository.deleteById(commentId, postId, communityId)
+    const deletedComment = await commentRepository.deleteById(commentId, postId, communityId, user.id)
     if (!deletedComment) {
         return c.json({ error: "Comment not found" }, 404)
     }

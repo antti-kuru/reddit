@@ -8,6 +8,10 @@
 
     let commentState = useCommentState();
 
+    import { useAuthState } from "$lib/states/authState.svelte";
+
+    let authState = useAuthState();
+
     $effect(() => {
         initComments(communityId, postId);
     });
@@ -22,7 +26,10 @@
     {#each commentState.comments[communityId]?.[postId] ?? [] as comment}
         <li>
             {comment.content}
-            <button onclick={() => removeComment(comment.id)}>Remove</button>
+            {#if authState.user && authState.user.id === comment.created_by}
+                <button onclick={() => removeComment(comment.id)}>Remove</button
+                >
+            {/if}
         </li>
     {/each}
 </ul>
