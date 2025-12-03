@@ -1,4 +1,6 @@
 import * as commentRepository from "../repositories/commentRepository.js"
+import * as postRepository from "../repositories/postRepository.js"
+
 
 const create = async (c) => {
     const user = c.get("user");
@@ -55,4 +57,29 @@ const deleteOne = async (c) => {
     return c.json(deletedComment)
 }
 
-export { create, readAll, deleteOne }
+const voteComment = (voteType) => async (c) => {
+    const user = c.get("user");
+    const commentId = Number(c.req.param('commentId'))
+
+    // The comment ID acts as the post_id in the votes table
+    const postId = commentId;
+
+    const existingComment = await commentRepository.findCommentWithVotes(postId);
+    if (!existingComment) {
+        return c.json({ error: "Comment not found" }, 404);
+    }
+
+    // 2. Add or update the vote using the general postRepository.addVote function (reused logic)
+    await postRepository.addVote(postId, user.id, voteType);
+
+    // 3. Return the updated comment with new vote counts
+    const updatedComment = await commentRepository.findCommentWithVotes(postId);
+
+    return c.json(updatedComment);
+};
+
+const upvoteComment = voteComment('upvote');
+const downvoteComment = voteComment('downvote');
+
+
+export { create, readAll, deleteOne, upvoteComment, downvoteComment }

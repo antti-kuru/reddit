@@ -8,7 +8,7 @@
     });
 </script>
 
-<h1>Communities</h1>
+<h1 class="text-3xl font-bold">Communities</h1>
 
 <CommunityList />
 <CommunityForm />

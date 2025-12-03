@@ -21,6 +21,9 @@ app.post("/api/auth/register", authController.register);
 // Login
 app.post("/api/auth/login", authController.login);
 
+// Home page
+app.get("/api/homepage", postController.homepage);
+
 
 // POST community
 app.post("/api/communities", middlewares.authenticate, communityController.create)
@@ -46,6 +49,11 @@ app.get("/api/communities/:communityId/posts/:postId", postController.readOne)
 // DELETE post
 app.delete("/api/communities/:communityId/posts/:postId", middlewares.authenticate, postController.deleteOne)
 
+// POST post votes
+app.post("/api/communities/:communityId/posts/:postId/upvote", middlewares.authenticate, postController.upvotePost)
+app.post("/api/communities/:communityId/posts/:postId/downvote", middlewares.authenticate, postController.downvotePost)
+
+
 // POST comment
 app.post("/api/communities/:communityId/posts/:postId/comments", middlewares.authenticate, commentController.create)
 
@@ -54,6 +62,11 @@ app.get("/api/communities/:communityId/posts/:postId/comments", commentControlle
 
 // DELETE comment
 app.delete("/api/communities/:communityId/posts/:postId/comments/:commentId", middlewares.authenticate, commentController.deleteOne)
+
+// POST comment votes
+app.post("/api/communities/:communityId/posts/:postId/comments/:commentId/upvote", middlewares.authenticate, commentController.upvoteComment)
+app.post("/api/communities/:communityId/posts/:postId/comments/:commentId/downvote", middlewares.authenticate, commentController.downvoteComment)
+
 
 
 export default app;

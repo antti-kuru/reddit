@@ -65,4 +65,35 @@ const deleteOne = async (c) => {
     return c.json(deletedPost)
 }
 
-export { create, readAll, readOne, deleteOne }
+const votePost = (voteType) => async (c) => {
+    const user = c.get("user");
+    const communityId = Number(c.req.param('communityId'))
+    const postId = Number(c.req.param('postId'))
+
+
+    const existingPost = await postRepository.findById(communityId, postId);
+    if (!existingPost) {
+        return c.json({ error: "Post not found" }, 404);
+    }
+
+    // 2. Add or update the vote (upsert logic in the repository)
+    await postRepository.addVote(postId, user.id, voteType);
+
+    // 3. Retrieve and return the post again to get the updated vote counts
+    const updatedPost = await postRepository.findPostWithVotes(postId);
+
+    return c.json(updatedPost);
+};
+
+const upvotePost = votePost('upvote');
+const downvotePost = votePost('downvote');
+
+
+
+const homepage = async (c) => {
+    const posts = await postRepository.findRecentPosts()
+    return c.json(posts)
+}
+
+
+export { create, readAll, readOne, deleteOne, upvotePost, downvotePost, homepage }

@@ -22,7 +22,22 @@ const deleteComment = async (communityId, postId, commentId) => {
     const response = await authFetch(`${PUBLIC_API_URL}/api/communities/${communityId}/posts/${postId}/comments/${commentId}`, {
         method: "DELETE"
     })
-    return await response.json
+    return await response.json()
 }
 
-export { readComments, createComment, deleteComment }
+const upvote = async (communityId, postId, commentId) => {
+    const response = await authFetch(`${PUBLIC_API_URL}/api/communities/${communityId}/posts/${postId}/comments/${commentId}/upvote`, {
+        method: "POST"
+    })
+    return await response.json()
+}
+
+const downvote = async (communityId, postId, commentId) => {
+    const response = await authFetch(`${PUBLIC_API_URL}/api/communities/${communityId}/posts/${postId}/comments/${commentId}/downvote`, {
+        method: "POST"
+    })
+    return await response.json()
+}
+
+
+export { readComments, createComment, deleteComment, upvote, downvote }

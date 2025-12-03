@@ -36,60 +36,82 @@
     };
 </script>
 
-<h2>
-    {data.action === "login" ? "Login" : "Register"}
-</h2>
+<div class="max-w-md mx-auto mt-10 p-6 bg-gray-800 rounded-xl shadow-2xl">
+    <h2 class="text-3xl font-extrabold text-blue-300 mb-6 text-center">
+        {data.action === "login" ? "Login to Account" : "Create Account"}
+    </h2>
 
-{#if message}
-    <div>
-        <p>{message}</p>
-    </div>
-{/if}
+    {#if message}
+        <div
+            class="bg-green-600/20 text-green-300 p-4 rounded-lg border border-green-500 mb-4"
+        >
+            <p>{message}</p>
+        </div>
+    {/if}
 
-{#if errorMessage}
-    <div>
-        <p>{errorMessage}</p>
-    </div>
-{/if}
+    {#if errorMessage}
+        <div
+            class="bg-red-600/20 text-red-300 p-4 rounded-lg border border-red-500 mb-4"
+        >
+            <p>{errorMessage}</p>
+        </div>
+    {/if}
 
-<form onsubmit={handleForm}>
-    <label>
-        <span>Email</span>
-        <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="user@example.com"
-            required
-        />
-    </label>
-    <br />
-    <label>
-        <span>Password</span>
-        <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Enter your password"
-            required
-        />
-    </label>
-    <br />
-    <button type="submit" disabled={isLoading}>
-        {isLoading
-            ? "Please wait..."
-            : data.action === "login"
-              ? "Login"
-              : "Register"}
-    </button>
-</form>
+    <form onsubmit={handleForm} class="space-y-4">
+        <label class="block">
+            <span class="text-sm font-medium text-gray-300 block mb-1"
+                >Email</span
+            >
+            <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="user@example.com"
+                class="w-full p-3 rounded-lg border-2 border-blue-700 bg-gray-700 text-white placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            />
+        </label>
 
-{#if data.action === "login"}
-    <p>
-        Don't have an account? <a href="/auth/register">Register here</a>
+        <label class="block">
+            <span class="text-sm font-medium text-gray-300 block mb-1"
+                >Password</span
+            >
+            <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                class="w-full p-3 rounded-lg border-2 border-blue-700 bg-gray-700 text-white placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            />
+        </label>
+
+        <button
+            type="submit"
+            disabled={isLoading}
+            class="w-full btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+            {isLoading
+                ? "Processing..."
+                : data.action === "login"
+                  ? "Login"
+                  : "Register"}
+        </button>
+    </form>
+
+    <p class="text-center mt-6 text-sm text-gray-400">
+        {#if data.action === "login"}
+            Don't have an account?
+            <a
+                href="/auth/register"
+                class="text-blue-400 hover:text-blue-300 font-semibold transition duration-200"
+                >Register here</a
+            >
+        {:else}
+            Already have an account?
+            <a
+                href="/auth/login"
+                class="text-blue-400 hover:text-blue-300 font-semibold transition duration-200"
+                >Login here</a
+            >
+        {/if}
     </p>
-{:else}
-    <p>
-        Already have an account? <a href="/auth/login">Login here</a>
-    </p>
-{/if}
+</div>

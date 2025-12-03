@@ -11,8 +11,12 @@
 </script>
 
 {#if community}
-    <h2>{community.name}</h2>
-    <p>{community.description}</p>
+    <div
+        class="bg-gray-800 p-6 rounded-lg shadow-xl text-white max-w-2xl mx-auto mt-6"
+    >
+        <h2 class="text-3xl font-bold text-blue-300 mb-2">{community.name}</h2>
+        <p class="text-lg text-gray-300">{community.description}</p>
+    </div>
 {:else}
-    <h1>Loading...</h1>
+    <h1 class="text-xl text-gray-400 mt-10 text-center">Loading...</h1>
 {/if}

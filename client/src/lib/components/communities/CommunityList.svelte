@@ -12,17 +12,32 @@
     };
 </script>
 
-<ul>
+<ul class="space-y-4">
     {#each communityState.communities as community}
-        <li>
-            <h2>
-                <a href={`/communities/${community.id}`}>{community.name}</a>
-            </h2>
-            <p>{community.description}</p>
+        <li
+            class=" bg-blue-900 card border-2 border-surface-300 rounded-lg shadow-md"
+        >
+            <div class="flex items-center justify-between p-4 gap-4">
+                <div class="flex-grow min-w-0">
+                    <h2>
+                        <a
+                            class="text-lg font-semibold text-white hover:text-blue-300 transition duration-200"
+                            href={`/communities/${community.id}`}
+                            >{community.name}</a
+                        >
+                    </h2>
+                    <p class="text-sm text-surface-600 mt-1 text-white">
+                        {community.description}
+                    </p>
+                </div>
 
-            {#if authState.user && authState.user.id === community.created_by}
-                <button onclick={() => remove(community.id)}>Remove</button>
-            {/if}
+                {#if authState.user && authState.user.id === community.created_by}
+                    <button
+                        class="btn bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-bl-lg rounded-tr-none text-sm float-right"
+                        onclick={() => remove(community.id)}>Remove</button
+                    >
+                {/if}
+            </div>
         </li>
     {/each}
 </ul>

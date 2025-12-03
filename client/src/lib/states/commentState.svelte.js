@@ -38,6 +38,14 @@ const useCommentState = () => {
             commentState[communityId][postId] = commentState[communityId][postId].filter(
                 c => c.id !== commentId
             );
+        },
+        upvote: async (communityId, postId, commentId) => {
+            const comment = await commentsApi.upvote(communityId, postId, commentId);
+            commentState[communityId][postId] = commentState[communityId][postId].map(c => c.id === commentId ? comment : c);
+        },
+        downvote: async (communityId, postId, commentId) => {
+            const comment = await commentsApi.downvote(communityId, postId, commentId);
+            commentState[communityId][postId] = commentState[communityId][postId].map(c => c.id === commentId ? comment : c);
         }
     };
 };

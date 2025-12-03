@@ -39,6 +39,14 @@ const usePostState = () => {
         removePost: async (communityId, postId) => {
             await postsApi.deletePost(communityId, postId)
             postState[communityId] = postState[communityId].filter(p => p.id !== postId)
+        },
+        upvote: async (communityId, postId) => {
+            const post = await postsApi.upvote(communityId, postId)
+            postState[communityId] = postState[communityId].map(p => p.id === postId ? post : p)
+        },
+        downvote: async (communityId, postId) => {
+            const post = await postsApi.downvote(communityId, postId)
+            postState[communityId] = postState[communityId].map(p => p.id === postId ? post : p)
         }
     }
 }
