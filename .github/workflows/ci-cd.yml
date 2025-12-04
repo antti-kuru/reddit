@@ -45,5 +45,5 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: deno-deploy-client-project-name
-          entrypoint: index.js
+          entrypoint: handler.js 
           root: ./client/build/
